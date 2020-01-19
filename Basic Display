@@ -1,8 +1,12 @@
+//Libraries to use. Libraries used were provided by www.Egloo.com as part of kit.
 #include <dht_nonblocking.h>
 #include <LiquidCrystal.h>
-#define DHT_SENSOR_TYPE DHT_TYPE_11
-LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
+//Define sensor type
+#define DHT_SENSOR_TYPE DHT_TYPE_11
+
+//Define pins used
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 static const int DHT_SENSOR_PIN = 2;
 DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
 
@@ -13,7 +17,6 @@ void setup( )
 }
 
 //Returns true of measurements available.
-
 static bool measure_environment( float *temperature, float *humidity )
 {
   static unsigned long measurement_timestamp = millis( );
@@ -32,14 +35,15 @@ static bool measure_environment( float *temperature, float *humidity )
 }
 
 //Main program loop.
-
 void loop( )
 {
   float temperature;
   float humidity;
 
-  // Measure temperature and humidity.  If the functions returns true, then a measurement is available.
+//If the functions returns true, then a measurement is available. May add false and display error message.
   if( measure_environment( &temperature, &humidity ) == true )
+  
+//Screen is 16 characters across, 2 lines.
   {
     lcd.setCursor(0, 0);
     lcd.print("Temp         F  ");
