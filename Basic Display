@@ -1,0 +1,54 @@
+#include <dht_nonblocking.h>
+#include <LiquidCrystal.h>
+#define DHT_SENSOR_TYPE DHT_TYPE_11
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
+
+static const int DHT_SENSOR_PIN = 2;
+DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
+
+// Starts lcd
+void setup( )
+{
+  lcd.begin(16, 2);
+}
+
+//Returns true of measurements available.
+
+static bool measure_environment( float *temperature, float *humidity )
+{
+  static unsigned long measurement_timestamp = millis( );
+
+//Measure every 4 seconds
+  if( millis( ) - measurement_timestamp > 3000ul )
+  {
+    if( dht_sensor.measure( temperature, humidity ) == true )
+    {
+      measurement_timestamp = millis( );
+      return( true );
+    }
+  }
+
+  return( false );
+}
+
+//Main program loop.
+
+void loop( )
+{
+  float temperature;
+  float humidity;
+
+  // Measure temperature and humidity.  If the functions returns true, then a measurement is available.
+  if( measure_environment( &temperature, &humidity ) == true )
+  {
+    lcd.setCursor(0, 0);
+    lcd.print("Temp         F  ");
+    lcd.setCursor(10, 0);
+    lcd.print((int)round(1.8 * temperature + 32.0)); //Converts from C to F and rounds
+    lcd.setCursor(0, 1);
+    lcd.print("Humidity     %  ");
+    lcd.setCursor(10, 1);
+    lcd.print((int)round(humidity)); //Set to round.
+    delay(500);
+  }
+}
