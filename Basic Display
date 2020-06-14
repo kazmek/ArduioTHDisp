@@ -1,4 +1,3 @@
-//Libraries to use. Libraries used were provided by www.Egloo.com as part of kit.
 #include <dht_nonblocking.h>
 #include <LiquidCrystal.h>
 
